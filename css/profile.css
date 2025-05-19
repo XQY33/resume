@@ -1,0 +1,347 @@
+/* 基础重置 */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+  color: #fff;
+  line-height: 1.6;
+}
+a {
+  color: #1abc9c;
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
+
+/* 页面布局 */
+.layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+
+    .nav-links li:first-child a {
+      background-color: #1abc9c;
+      color: white;
+      font-size: 16px;
+    }
+    .nav-links li:first-child a i {
+      color: white;
+    }
+    .nav-links li.section-label {
+      margin: 1.5rem 0 0.5rem;
+      padding-left: 0.5rem;
+      color: #888;
+      font-size: 12px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+    .nav-links li:not(:first-child):not(.section-label) a {
+      margin-left: 16px;
+      opacity: 0.85;
+      font-size: 14px;
+    }
+    .nav-links a {
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      padding: 0.6rem 1rem;
+      border-radius: 8px;
+      transition: 0.3s;
+    }
+    .nav-links a.active {
+      background: linear-gradient(90deg, #1abc9c, #149d82);
+      color: #fff;
+      box-shadow: 0 0 8px rgba(26, 188, 156, 0.6);
+    }
+    .nav-links a.active i {
+      color: #fff;
+    }
+    .nav-links a i {
+      margin-right: 0.6rem;
+      font-size: 1.3rem;
+      transition: color 0.3s;
+    }
+    .basic-info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1rem;
+    }
+    .basic-info-grid li {
+      margin-bottom: 0.5rem;
+    }
+    .skills .skill {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.8rem;
+    }
+    .skills .skill span {
+      flex: 1;
+    }
+    .skills .bar {
+      height: 6px;
+      background: #444;
+      border-radius: 10px;
+      overflow: hidden;
+      width: 120px;
+      margin-left: 10px;
+    }
+    .skills .bar div {
+      height: 100%;
+      background: linear-gradient(90deg, #1abc9c, #16a085);
+      border-radius: 10px;
+    }
+    .project-grid {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .project {
+      flex: 1;
+      background: rgba(255, 255, 255, 0.04);
+      padding: 1rem;
+      border-radius: 10px;
+      box-shadow: 0 0 8px rgba(0,255,255,0.05);
+      min-width: 280px;
+    }
+    .project h3 {
+      font-size: 1.05rem;
+      margin-bottom: 0.5rem;
+      color: #1abc9c;
+    }
+    .project p {
+      font-size: 0.9rem;
+      color: #ccc;
+    }
+
+/* 侧边栏导航 */
+.sidebar {
+  width: 220px;
+  background-color: #203a43
+  padding: 2rem 1rem;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+}
+.sidebar h2 {
+  text-align: center;
+  color: #1abc9c;
+  margin-bottom: 2rem;
+}
+.nav-links {
+  list-style: none;
+}
+.nav-links li {
+  margin: 1rem 0;
+}
+.nav-links a {
+  font-weight: bold;
+  font-size: 15px;
+  color: #ccc;
+  display: flex;
+  align-items: center;
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  transition: background 0.3s;
+}
+.nav-links a i {
+  margin-right: 0.6rem;
+  font-size: 1.3rem;
+}
+.nav-links a:hover,
+.nav-links a.active {
+  background-color: #1abc9c;
+  color: #fff;
+}
+
+/* 主体内容区域 */
+.main {
+  margin-left: 220px;
+  padding: 2rem;
+  width: calc(100% - 220px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.section {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 2rem;
+  margin-bottom: 2rem;
+  width: 95%;
+  max-width: 1000px;
+  border-radius: 12px;
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.08);
+  backdrop-filter: blur(4px);
+}
+.section h2 {
+  font-size: 1.6rem;
+  color: #1abc9c;
+  border-left: 5px solid #1abc9c;
+  padding-left: 12px;
+  margin-bottom: 1rem;
+}
+.sub-title {
+  color: #1abc9c;
+  margin-top: 1.5rem;
+  margin-bottom: 0.6rem;
+  font-size: 1.2rem;
+  border-bottom: 1px dashed #1abc9c;
+  padding-bottom: 0.3rem;
+}
+
+/* 列表内容 */
+.section ul {
+  list-style: none;
+  padding-left: 1rem;
+}
+.section ul li {
+  margin-bottom: 0.5rem;
+}
+.checklist {
+  list-style-type: disc;
+  color: #eee;
+  margin-left: 1rem;
+}
+
+/* 技能条 */
+.skills .skill {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.8rem;
+}
+.skills .skill span {
+  flex: 1;
+}
+.skills .bar {
+  height: 6px;
+  background: #444;
+  border-radius: 10px;
+  overflow: hidden;
+  width: 120px;
+  margin-left: 10px;
+}
+.skills .bar div {
+  height: 100%;
+  background: linear-gradient(90deg, #1abc9c, #16a085);
+  border-radius: 10px;
+}
+
+/* 项目卡片横排 */
+.project-grid {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.project {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.04);
+  padding: 1rem;
+  border-radius: 10px;
+  box-shadow: 0 0 8px rgba(0,255,255,0.05);
+  min-width: 280px;
+}
+.project h3 {
+  font-size: 1.05rem;
+  margin-bottom: 0.5rem;
+  color: #1abc9c;
+}
+.project p {
+  font-size: 0.9rem;
+  color: #ccc;
+}
+
+/* 自我评价样式 */
+#evaluation p {
+  font-size: 1rem;
+  color: #ddd;
+  margin-top: 1rem;
+  line-height: 1.8;
+}
+.awards-list {
+  list-style-type: none;
+  padding: 0;
+  font-family: 'Arial', sans-serif;
+}
+
+.award-item {
+  font-size: 16px;
+  line-height: 1.6;
+  margin-bottom: 12px;
+}
+
+.award-item strong {
+  font-weight: bold;
+}
+
+.patent {
+  color: #1a73e8; /* 蓝色，突出专利 */
+}
+
+.competition {
+  color: #108514; /* 绿色，突出竞赛奖项 */
+}
+
+.scholarship {
+  color: #108514; /* 橙色，突出奖学金 */
+}
+
+/* 鼠标悬停时的效果 */
+.award-item:hover {
+  transform: translateX(5px); /* 轻微的水平移动 */
+  color: #cb1f08; /* 悬停时的颜色变化 */
+  cursor: pointer;
+}
+
+/* 为了美化整体布局，可以加上边框 */
+.awards-list {
+  border-left: 4px solid #4caf50; /* 左侧边框，增强视觉效果 */
+  padding-left: 20px;
+}
+
+
+
+
+  .cool-music-player {
+      min-width: 220px;
+      max-width: 360px;
+      flex: 1 1 260px;
+      background: var(--card-bg);
+      box-shadow: 0 6px 24px #1abc9c22;
+      border-radius: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 27px 20px 20px 20px;
+    }
+    .music-title {
+      color: #1abc9c;
+      font-size: 1.12rem;
+      text-align: center;
+      margin-bottom: 7px;
+      letter-spacing: 1.3px;
+      font-weight: 600;
+    }
+    .music-tip {
+      font-size: 12px;
+      color: #21e4ce;
+      font-weight: 400;
+    }
+    .cool-music-player audio {
+      width: 90%;
+      margin: 7px 0 13px 0;
+      border-radius: 6px;
+      background: #222;
+    }

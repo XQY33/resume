@@ -1,0 +1,254 @@
+/* 重置样式 */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+  color: #fff;
+}
+
+.layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* 左侧导航栏 */
+.sidebar {
+  width: 220px;
+  background-color: #111a2f;
+  padding: 2rem 1rem 4rem;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.sidebar h2 {
+  text-align: center;
+  color: #1abc9c;
+  margin-bottom: 1rem;
+}
+
+.nav-links {
+  list-style: none;
+  padding-left: 0;
+}
+
+.nav-links li {
+  margin: 1rem 0;
+}
+
+.nav-links a {
+  color: #ccc;
+  text-decoration: none;
+  padding: 0.5rem 0.75rem;
+  display: flex;
+  align-items: center;
+  border-radius: 8px;
+  transition: 0.3s;
+}
+
+.nav-links a i {
+  margin-right: 0.6rem;
+  font-size: 1.3rem;
+}
+
+.nav-links a:hover,
+.nav-links a.active {
+  background-color: #1abc9c;
+  color: white;
+}
+
+/* 联系方式图标区 */
+.social-links {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  font-size: 2rem;
+  color: #ccc;
+}
+
+.social-links a {
+  color: #ccc;
+  transition: 0.3s;
+}
+
+.social-links a:hover {
+  color: #1abc9c;
+}
+
+.contact-info {
+  text-align: center;
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
+  color: #aaa;
+}
+
+.contact-info p {
+  margin: 0.3rem 0;
+}
+
+/* 主体内容区域 */
+.main {
+  margin-left: 220px;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: calc(100% - 220px);
+}
+
+/* 顶部欢迎 */
+.hero {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.hero-title {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.hero-title span {
+  color: #1abc9c;
+}
+
+.hero-subtitle {
+  font-size: 1.1rem;
+  color: #ccc;
+}
+
+.hero-buttons .btn {
+  background: #1abc9c;
+  color: white;
+  padding: 0.5rem 1rem;
+  margin: 1rem 0.5rem;
+  text-decoration: none;
+  border-radius: 8px;
+  transition: 0.3s;
+}
+
+.hero-buttons .btn:hover {
+  background: #16a085;
+}
+
+/* 信息卡片 */
+.card-section {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2rem;
+  width: 100%;
+}
+
+.info-card {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 2rem;
+  border-radius: 12px;
+  max-width: 400px;
+  text-align: center;
+  backdrop-filter: blur(5px);
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+}
+
+.info-card img {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  margin-bottom: 1rem;
+  border: 3px solid #1abc9c;
+}
+
+blockquote {
+  font-style: italic;
+  margin-top: 1rem;
+  color: #ccc;
+}
+
+/* 音乐播放器与动效 */
+.cool-music-player {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 4rem;
+  padding-bottom: 2rem;
+  width: 100%;
+}
+
+.music-wave-container {
+  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+  padding: 1.5rem;
+  border-radius: 15px;
+  box-shadow: 0 0 30px rgba(0, 255, 255, 0.2);
+  width: 90%;
+  max-width: 500px;
+  text-align: center;
+  color: #fff;
+}
+
+.music-title {
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+}
+
+.music-tip {
+  font-size: 0.85rem;
+  color: #eee;
+  display: block;
+  margin-top: 0.2rem;
+  font-style: italic;
+}
+
+.music-wave-container audio {
+  width: 100%;
+  margin: 1rem 0;
+  border-radius: 10px;
+}
+
+.wave-bars {
+  display: flex;
+  justify-content: center;
+  align-items: end;
+  gap: 6px;
+  height: 60px;
+  margin-top: 10px;
+}
+
+.bar {
+  width: 6px;
+  background: linear-gradient(180deg, #1abc9c, #16a085);
+  border-radius: 5px;
+  height: 20%;
+  opacity: 0.9;
+  transform-origin: bottom;
+}
+
+/* 播放状态下才动 */
+.wave-bars.playing .bar {
+  animation: dance 1s infinite ease-in-out;
+}
+
+.wave-bars.playing .bar:nth-child(1) { animation-delay: 0s; }
+.wave-bars.playing .bar:nth-child(2) { animation-delay: 0.1s; }
+.wave-bars.playing .bar:nth-child(3) { animation-delay: 0.2s; }
+.wave-bars.playing .bar:nth-child(4) { animation-delay: 0.3s; }
+.wave-bars.playing .bar:nth-child(5) { animation-delay: 0.4s; }
+.wave-bars.playing .bar:nth-child(6) { animation-delay: 0.5s; }
+.wave-bars.playing .bar:nth-child(7) { animation-delay: 0.6s; }
+.wave-bars.playing .bar:nth-child(8) { animation-delay: 0.7s; }
+.wave-bars.playing .bar:nth-child(9) { animation-delay: 0.8s; }
+.wave-bars.playing .bar:nth-child(10) { animation-delay: 0.9s; }
+.wave-bars.playing .bar:nth-child(11) { animation-delay: 1s; }
+.wave-bars.playing .bar:nth-child(12) { animation-delay: 1.1s; }
+
+@keyframes dance {
+  0%, 100% { height: 20%; }
+  50% { height: 100%; }
+}

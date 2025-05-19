@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <title>GeoJSON重庆数据地图绘制</title>
+  
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <!-- 导航栏和主色调CSS -->
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/hometown-map.css">
+  <link href="https://cdn.jsdelivr.net/npm/remixicon/fonts/remixicon.css" rel="stylesheet"/>
+  <script src="https://d3js.org/d3.v3.min.js"></script>
+  <style>
+    /* 可单独写到hometown-map.css，建议和base.css配合用 */
+    .main {
+      flex: 1;
+      min-width: 0;
+      padding: 35px 0 0 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      overflow-x: auto;
+      min-height: 100vh;
+    }
+    .map-title {
+      color: #1abc9c;
+      font-size: 2rem;
+      font-weight: bold;
+      margin: 30px 0 20px 0;
+      letter-spacing: 3px;
+      text-shadow: 0 4px 18px #12e5e4aa;
+    }
+    .map-container {
+      background: rgba(255,255,255,0.08);
+      border-radius: 20px;
+      box-shadow: 0 6px 40px #1abc9c22;
+      overflow: auto;
+      margin-bottom: 30px;
+      margin-top: 10px;
+      padding: 18px 16px 0 16px;
+      position: relative;
+    }
+    /* 地图返回按钮 */
+    .map-back-btn {
+      display: inline-block;
+      margin: 18px 0 6px 0;
+      padding: 7px 22px 7px 22px;
+      background: linear-gradient(90deg, #1abc9c 60%, #20639b 100%);
+      color: #fff;
+      border-radius: 14px;
+      text-decoration: none;
+      font-size: 1.1rem;
+      box-shadow: 0 4px 18px #1abc9c2b;
+      font-weight: bold;
+      letter-spacing: 2px;
+      transition: background 0.21s;
+    }
+    .map-back-btn:hover {
+      background: linear-gradient(90deg, #20639b 40%, #1abc9c 100%);
+      color: #fff;
+      text-shadow: 0 2px 9px #fff9;
+    }
+    /* 覆盖地图文字风格 */
+    .texts {
+      font-family: "微软雅黑", "Arial", sans-serif;
+      font-size: 15px;
+      font-weight: bold;
+      stroke: #fff;
+      paint-order: stroke fill;
+      stroke-width: 0.8px;
+      cursor: pointer;
+      pointer-events: all;
+      transition: font-size 0.22s, fill 0.2s;
+      text-shadow: 0 2px 6px #fff8;
+    }
+    .texts:hover {
+      fill: #1abc9c;
+      font-size: 22px;
+      stroke-width: 2px;
+    }
+    .province {
+      cursor: pointer;
+      opacity: 0.89;
+      transition: fill 0.2s, filter 0.18s;
+      stroke: #fff;
+      stroke-width: 0.6;
+      filter: drop-shadow(0 3px 8px #2281e377);
+    }
+    .province:hover {
+      opacity: 1;
+      filter: drop-shadow(0 8px 22px #1abc9c88);
+    }
+    /* 地图适应父容器/滚动 */
+    @media (max-width:900px) {
+      .main { padding: 6px 0 0 0;}
+      .map-title { font-size: 1.1rem; }
+      .map-container { padding: 0 0 0 0;}
+    }
+  </style>
+</head>
+<body>
+
+  
+  <div class="layout">
+    <!-- 左侧导航栏 -->
+    <nav class="sidebar">
+      <h2>导航栏</h2>
+      <ul class="nav-links">
+        <li><a href="index.html"><i class="ri-home-4-line"></i> 首页</a></li>
+        <li><a href="profile.html"><i class="ri-user-3-line"></i> 个人简介</a></li>
+        <li><a href="score.html"><i class="ri-team-line"></i> 大学成绩</a></li>
+        <li><a href="rel.html"><i class="ri-team-line"></i> 人际关系</a></li>
+        <li><a href="school.html"><i class="ri-graduation-cap-line"></i> 大学</a></li>
+        <li><a href="home.html" class="active"><i class="ri-home-smile-2-line"></i> 家乡</a></li>
+      </ul>
+      <!-- 社交区（如有可以放这里） -->
+      <div class="social-links" style="margin-top:30px;">
+        <a href="#"><i class="ri-github-fill"></i></a>
+        <a href="#"><i class="ri-bilibili-line"></i></a>
+        <a href="#"><i class="ri-mail-line"></i></a>
+        <div class="contact-info">
+          <p>电话：15388888888</p>
+          <p>邮箱：xuqiyong2023@gmail.com</p>
+        </div>
+      </div>
+    </nav>
+    <!-- 右侧地图主区 -->
+    <main class="main">
+      <a href="index.html" class="map-back-btn"><i class="ri-arrow-left-line"></i> 返回主页</a>
+      <div class="map-title">重庆市行政区划（GeoJSON 数据可视化）</div>
+    <div style="background:linear-gradient(90deg,#021e34 80%,#10a1c9);padding:15px 0 9px 0;">
+    <p style="color:#faad14;font-size:16px;font-weight:bold;text-align:center;margin:0;">
+      温馨提示：请使用 <span style="color:#b21d1d;">Web 服务器</span>（如 XAMPP、Live Server、Python http.server 等）访问本页，避免直接 <span style="color:#e57373;">file://</span> 打开，确保地图、音频等功能正常显示。
+    </p>
+  </div>
+
+      <div class="map-container" id="mapbox">
+        <!-- D3地图会自动插入到这里 -->
+      </div>
+    </main>
+  </div>
+  <script>
+    // 地图宽高自适应主区
+    const mapbox = document.getElementById('mapbox');
+    const width = Math.min(window.innerWidth * 0.84, 1100);
+    const height = Math.min(window.innerHeight * 0.77, 800);
+
+    // 创建SVG在指定容器中
+    const svg = d3.select("#mapbox").append("svg")
+      .attr("width", width)
+      .attr("height", height)
+      .style("background", "none");
+
+    // 背景渐变（最底层）
+    var defs = svg.append("defs");
+    var linearGradient = defs.append("linearGradient")
+      .attr("id", "gradient")
+      .attr("x1", "0%").attr("y1", "0%")
+      .attr("x2", "100%").attr("y2", "100%");
+    linearGradient.append("stop")
+      .attr("offset", "0%")
+      .attr("stop-color", "#2e6e95");
+    linearGradient.append("stop")
+      .attr("offset", "100%")
+      .attr("stop-color", "#1abc9c");
+    svg.append("rect")
+      .attr("width", width)
+      .attr("height", height)
+      .attr("fill", "url(#gradient)");
+
+    // 投影
+    const projection = d3.geo.mercator()
+      .center([107.7539, 30.1904])
+      .scale(10000)
+      .translate([width / 2, height / 2]);
+    const path = d3.geo.path().projection(projection);
+    const color = d3.scale.category20();
+
+    // 加载GeoJSON数据
+    d3.json("chongqing.json", function(error, root) {
+      if (error) return console.error(error);
+      // 地区面
+      svg.append("g").selectAll("path")
+        .data(root.features)
+        .enter()
+        .append("path")
+        .attr("class", "province")
+        .style("fill", function(d, i) { return color(i); })
+        .attr("d", path)
+        .on("mouseover", function(d, i) {
+          d3.select(this).style("fill", "#fff24d");
+        })
+        .on("mouseout", function(d, i) {
+          d3.select(this).style("fill", color(i));
+        });
+
+      // 文字
+      svg.append("g").selectAll(".texts")
+        .data(root.features)
+        .enter()
+        .append("text")
+        .attr("class", "texts")
+        .text(function(d) { return d.properties.name; })
+        .attr("transform", function(d) {
+          var centroid = path.centroid(d),
+              x = centroid[0] - 15,
+              y = centroid[1] - 5;
+          // 根据区名微调文字位置
+          if (d.properties.name === "九龙坡区") y -= 15;
+          if (d.properties.name === "璧山县") x -= 15;
+          if (["沙坪坝区","南岸区","巴南区","大渡口区"].includes(d.properties.name)) y += 18;
+          if (d.properties.name === "渝中区") x -= 15;
+          if (d.properties.name === "沙坪坝区") x += 15;
+          y += 12;
+          return "translate(" + x + ", " + y + ")";
+        })
+        .attr('fill', '#fff')
+        .attr("font-size", "15px")
+        .on("mouseover", function(d, i) {
+          d3.select(this)
+            .attr("font-size", 26)
+            .attr('fill', '#1abc9c');
+        })
+        .on("mouseout", function(d, i) {
+          d3.select(this)
+            .attr("font-size", 15)
+            .attr('fill', '#fff');
+        });
+    });
+  </script>
+
+<audio id="audioElement" src="./music/肯去承担爱(射雕英雄传).mp3" autoplay loop style="display:none"></audio>
+
+</body>
+</html>

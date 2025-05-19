@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <title>我的人际关系网络</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://cdn.jsdelivr.net/npm/remixicon/fonts/remixicon.css" rel="stylesheet" />
+  <script src="https://d3js.org/d3.v3.min.js"></script>
+  <link rel="stylesheet" href="css/rel.css" />
+  
+</head>
+<body>
+  <div class="layout">
+    <!-- 导航栏 -->
+    <nav class="sidebar">
+      <h2>导航</h2>
+      <ul class="nav-links">
+        <li><a href="index.html"><i class="ri-home-4-line"></i> 首页</a></li>
+        <li><a href="profile.html"><i class="ri-user-3-line"></i> 个人简历</a></li>
+        <li><a href="rel.html" class="active"><i class="ri-group-line"></i> 人际关系</a></li>
+        <li><a href="score.html"><i class="ri-bar-chart-2-line"></i> 大学成绩</a></li>
+        <li><a href="school.html"><i class="ri-graduation-cap-line"></i> 我的大学</a></li>
+        <li><a href="home.html"><i class="ri-landscape-line"></i> 我的家乡</a></li>
+      </ul>
+    </nav>
+    <main class="main">
+      <h1><i class="ri-group-line"></i> 我的社交关系网络</h1>
+      <div id="relation-graph"></div>
+      <div id="tooltip" class="tooltip"></div>
+    </main>
+  </div>
+
+  <script>
+    // 节点和边数据
+    var nodes = [
+      { name: "徐其雍", image: "images/xqy.jpg", intro: "xqy 一名有思想的学生" },
+      { name: "zf", image: "images/hh.jpg", intro: "zf 一个漂亮的女孩子" },
+      { name: "张里", image: "images/wh.jpg", intro: "一名负责的老师" },
+      { name: "ssm", image: "images/zsk.jpg", intro: "一个大傻逼" },
+      { name: "cyb", image: "images/cyb.jpg", intro: "实验室学姐" },
+      { name: "lyw", image: "images/wzh.jpg", intro: "lyw是一个diaomao" },
+      { name: "zrr", image: "images/wxy.jpg", intro: "zrr给他半张毕业证" },
+      { name: "xbl", image: "images/tq.jpg", intro: "xbl是一个瓦同学" },
+      { name: "wjj", image: "images/hj.jpg", intro: "wjj是22级的传奇人物" },
+      { name: "tjl", image: "images/lxj.jpg", intro: "tjl是我的室友" },
+      { name: "ayx", image: "images/fy.jpg", intro: "ayx是21级自动化专业神奇学姐" },
+      { name: "yjy", image: "images/zy.jpg", intro: "yjy是21级电子1班皓学长" }
+    ];
+    // 边关系
+    var edges = [
+      { source: 0, target: 1, relation: "高中同学&情侣" },
+      { source: 0, target: 9, relation: "室友" },
+      { source: 0, target: 2, relation: "朋友" },
+      { source: 0, target: 3, relation: "朋友" },
+      { source: 0, target: 4, relation: "朋友" },
+      { source: 0, target: 5, relation: "朋友" },
+      { source: 0, target: 6, relation: "朋友" },
+      { source: 0, target: 7, relation: "朋友" },
+      { source: 0, target: 8, relation: "朋友" },
+      { source: 0, target: 10, relation: "朋友" },
+      { source: 0, target: 11, relation: "朋友" },
+
+      { source: 2, target: 0, relation: "师生" },
+      { source: 2, target: 3, relation: "师生" },
+      { source: 2, target: 4, relation: "师生" },
+      { source: 2, target: 5, relation: "师生" },
+      { source: 2, target: 6, relation: "师生" },
+      { source: 2, target: 7, relation: "师生" },
+      { source: 2, target: 8, relation: "师生" },
+      { source: 2, target: 9, relation: "师生" },
+      { source: 2, target: 10, relation: "师生" },
+      { source: 2, target: 11, relation: "师生" },
+
+      { source: 4, target: 5, relation: "情侣" },
+      { source: 11, target: 10, relation: "喜欢" }
+    ];
+
+    // 画布设置
+    var width = 900, height = 550, img_w = 56, img_h = 56, radius = 29;
+    var svg = d3.select("#relation-graph").append("svg")
+      .attr("width", width)
+      .attr("height", height);
+
+    var force = d3.layout.force()
+      .nodes(nodes).links(edges)
+      .size([width, height])
+      .linkDistance(170)
+      .charge(-950)
+      .start();
+
+    // tooltip
+    var tooltip = d3.select("#tooltip");
+
+    // 箭头
+    var defs = svg.append("defs");
+    var arrowMarker = defs.append("marker")
+      .attr("id", "arrow")
+      .attr("markerUnits", "strokeWidth")
+      .attr("markerWidth", 12)
+      .attr("markerHeight", 12)
+      .attr("viewBox", "0 0 12 12")
+      .attr("refX", 19).attr("refY", 6)
+      .attr("orient", "auto");
+    arrowMarker.append("path")
+      .attr("d", "M2,2 L10,6 L2,10 L6,6 L2,2")
+      .attr("fill", "#1abc9c");
+
+    // 边（path）加唯一id，供textPath引用
+    var path = svg.selectAll(".edges")
+      .data(edges).enter()
+      .append("path")
+      .attr("class", "edges")
+      .attr("id", function(d, i){ return "edgepath" + i; })
+      .attr("marker-end", "url(#arrow)");
+
+    // 关系标签
+    var pathtext = svg.selectAll(".pathText")
+      .data(edges)
+      .enter()
+      .append("text")
+      .attr("class", "pathText")
+      .append("textPath")
+      .attr("text-anchor", "middle")
+      .attr("startOffset", "55%")
+      .attr("xlink:href", function (d, i) { return "#edgepath" + i; })
+      .text(function (d) { return d.relation; });
+
+    // 节点头像
+    var circles = svg.selectAll(".forceCircle")
+      .data(nodes)
+      .enter()
+      .append("circle")
+      .attr("class", "forceCircle")
+      .attr("r", radius)
+      .attr("fill", function (d, i) {
+        // 创建圆形图片
+        var patId = "circleimg" + i;
+        var defs = svg.select("defs");
+        var pattern = defs.append("pattern")
+          .attr("id", patId)
+          .attr("patternUnits", "objectBoundingBox")
+          .attr("width", 1)
+          .attr("height", 1);
+        pattern.append("image")
+          .attr("x", 0)
+          .attr("y", 0)
+          .attr("width", img_w)
+          .attr("height", img_h)
+          .attr("xlink:href", d.image);
+        return "url(#" + patId + ")";
+      })
+      .on("mouseover", function (d, i) {
+        // 高亮自己和相关连线
+        d3.select(this).classed("highlight", true);
+        path.classed("highlight", function(e){ return e.source===d||e.target===d; });
+        tooltip.style("opacity", 1)
+          .html("<strong>" + d.name + "</strong><br>" + d.intro);
+      })
+      .on("mousemove", function () {
+        tooltip.style("left", (d3.event.pageX+20)+"px")
+               .style("top", (d3.event.pageY-15)+"px");
+      })
+      .on("mouseout", function (d) {
+        d3.select(this).classed("highlight", false);
+        path.classed("highlight", false);
+        tooltip.style("opacity", 0);
+      })
+      .call(force.drag);
+
+    // 姓名标签
+    var texts = svg.selectAll(".forceText")
+      .data(nodes)
+      .enter()
+      .append("text")
+      .attr("class", "forceText")
+      .attr("dx", "-1.7em")
+      .attr("dy", "3.1em")
+      .text(function (d) { return d.name; });
+
+    force.on("tick", function () {
+      path.attr("d", function (d) {
+        return "M" + d.source.x + "," + d.source.y + "L" + d.target.x + "," + d.target.y;
+      });
+      circles.attr("cx", function (d) { return d.x; });
+      circles.attr("cy", function (d) { return d.y; });
+      texts.attr("x", function (d) { return d.x; });
+      texts.attr("y", function (d) { return d.y; });
+    });
+  </script>
+
+     <div class="music-bar">
+            <div style="color:#1abc9c;font-size:1rem;font-weight:600;">
+                🎵 背景音乐：
+            </div>
+            <audio id="audioElement" src="./music/枫.mp3" controls autoplay loop></audio>
+        </div>
+    </div>
+
+</body>
+</html>

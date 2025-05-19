@@ -1,0 +1,164 @@
+body {
+  background: linear-gradient(135deg, #203a43 0%, #2c5364 100%);
+  margin: 0;
+  font-family: '微软雅黑', 'Arial', sans-serif;
+  min-height: 100vh;
+}
+.layout {
+  display: flex;
+  min-height: 100vh;
+}
+.sidebar {
+  width: 230px;
+  background: #203a43;
+  color: #fff;
+  min-height: 100vh;
+  box-shadow: 2px 0 8px #0002;
+  padding-top: 34px;
+}
+.sidebar h2 {
+  text-align: center;
+  font-size: 22px;
+  margin-bottom: 28px;
+  letter-spacing: 2px;
+  font-weight: bold;
+  color: #fff;
+  text-shadow: 0 2px 10px #1abc9c33;
+}
+.nav-links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.nav-links li {
+  margin: 16px 0;
+}
+.nav-links li.section-label {
+  margin: 27px 0 10px 20px;
+  font-size: 13px;
+  color: #1abc9cbb;
+  letter-spacing: 1px;
+  font-weight: bold;
+}
+.nav-links a {
+  color: #e6faf7;
+  text-decoration: none;
+  font-size: 17px;
+  display: flex;
+  align-items: center;
+  padding: 11px 30px 11px 28px;
+  border-radius: 12px 0 0 12px;
+  transition: background 0.18s, color 0.16s;
+  font-weight: 500;
+  letter-spacing: 1px;
+}
+.nav-links a.active,
+.nav-links a:hover {
+  background: linear-gradient(90deg, #1abc9c 40%, #149d82 100%);
+  color: #fff;
+  font-weight: bold;
+  box-shadow: 0 2px 12px #1abc9c70;
+}
+
+.main {
+  flex: 1;
+  padding: 40px 0 0 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+h1 {
+  margin-top: 10px;
+  margin-bottom: 32px;
+  color: #20e3ce;
+  font-weight: bold;
+  font-size: 2.1rem;
+  letter-spacing: 2px;
+  text-shadow: 0 3px 12px #1abc9c55, 0 2px 9px #fff9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+#relation-graph {
+  margin: 0 auto;
+  border-radius: 18px;
+  box-shadow: 0 8px 36px #1abc9c29, 0 2px 14px #1abc9c21;
+  background: rgba(255,255,255,0.11);
+  padding: 15px;
+  min-width: 820px;
+  min-height: 540px;
+}
+
+/* 关系边 */
+.edges {
+  stroke: #1abc9c;
+  stroke-width: 2.7px;
+  opacity: 0.75;
+  transition: stroke 0.19s, stroke-width 0.19s, opacity 0.18s;
+  filter: drop-shadow(0 0 6px #1abc9c61);
+}
+.edges.highlight {
+  stroke: #f9d923;
+  stroke-width: 4px;
+  opacity: 1;
+  filter: drop-shadow(0 0 18px #f9d92399);
+}
+
+.pathText textPath {
+  fill: #f6e58d;
+  font-size: 14px;
+  font-weight: bold;
+  pointer-events: none;
+  text-shadow: 0 2px 9px #1abc9c22;
+  letter-spacing: 0.5px;
+  opacity: 0.97;
+}
+
+/* 圆形头像 */
+.forceCircle {
+  stroke: #fff;
+  stroke-width: 3px;
+  cursor: pointer;
+  filter: drop-shadow(0 3px 15px #1abc9c66);
+  transition: stroke 0.19s, filter 0.19s;
+  background: #1abc9c;
+}
+.forceCircle.highlight {
+  stroke: #f9d923;
+  stroke-width: 5px;
+  filter: drop-shadow(0 0 26px #f9d923a0);
+}
+
+/* 姓名标签 */
+.forceText {
+  fill: #149d82;
+  font-size: 17px;
+  font-weight: 700;
+  text-shadow: 0 2px 8px #fff8, 0 4px 12px #1abc9c25;
+  pointer-events: none;
+  user-select: none;
+  letter-spacing: 0.4px;
+}
+
+.tooltip {
+  position: absolute;
+  pointer-events: none;
+  z-index: 1000;
+  background: rgba(32, 58, 67, 0.98);
+  color: #1abc9c;
+  font-size: 16px;
+  font-weight: bold;
+  padding: 15px 26px;
+  border-radius: 13px;
+  box-shadow: 0 4px 22px #1abc9c33;
+  opacity: 0;
+  transition: opacity 0.22s;
+  text-shadow: 0 2px 8px #fff4, 0 2px 14px #149d8225;
+}
+@media (max-width: 1100px) {
+  #relation-graph {
+    min-width: 320px;
+    padding: 4px;
+  }
+}

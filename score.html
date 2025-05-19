@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <title>大学成绩可视化</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://cdn.jsdelivr.net/npm/remixicon/fonts/remixicon.css" rel="stylesheet" />
+  <script src="https://d3js.org/d3.v5.min.js"></script>
+  <link rel="stylesheet" href="css/score.css" />
+</head>
+<body>
+  <div class="layout">
+    <!-- 导航栏 -->
+    <nav class="sidebar">
+      <h2>导航</h2>
+      <ul class="nav-links">
+        <li><a href="index.html"><i class="ri-home-4-line"></i> 首页</a></li>
+        <li class="section-label">简历页面</li>
+        <li><a href="profile.html"><i class="ri-user-3-line"></i> 个人简历</a></li>
+        <li><a href="rel.html"><i class="ri-group-line"></i> 人际关系</a></li>
+        <li><a href="score.html" class="active"><i class="ri-bar-chart-2-line"></i> 大学成绩</a></li>
+        <li><a href="school.html"><i class="ri-graduation-cap-line"></i> 我的大学</a></li>
+        <li><a href="home.html"><i class="ri-landscape-line"></i> 我的家乡</a></li>
+      </ul>
+    </nav>
+    <!-- 主体内容 -->
+    <main class="main">
+      <h1><i class="ri-pie-chart-2-line"></i> 我的大学课程成绩分布</h1>
+      <div id="pie-chart"></div>
+      <h2 class="sub-title"><i class="ri-radar-line"></i> 能力雷达图</h2>
+      <div id="radar-chart"></div>
+    </main>
+  </div>
+  <div id="tooltip" class="pie-tooltip"></div>
+  <div id="modal" class="modal">
+    <div class="modal-content">
+      <span class="close-btn" id="modal-close">&times;</span>
+      <div id="modal-body"></div>
+    </div>
+  </div>
+<script>
+const pieData = [
+  { subject: "信号与系统", score: 85, desc: "本门课程涵盖信号处理基础，助力系统设计能力提升。" },
+  { subject: "数字信号处理", score: 85, desc: "学习数字滤波与信号分析，是嵌入式信号采集的核心基础。" },
+  { subject: "C语言", score: 90, desc: "嵌入式开发核心技能，驱动、算法、底层开发基础。" },
+  { subject: "Python", score: 94, desc: "用于算法原型、数据分析及可视化。" },
+  { subject: "高等数学", score: 95, desc: "强化逻辑思维与建模能力，数学功底扎实。" },
+  { subject: "电路", score: 87, desc: "电子信息基础，硬件设计必修课程。" },
+  { subject: "政治", score: 77, desc: "理论素养，综合素质培养。" }
+];
+
+// 饼图参数
+const pieW = 520, pieH = 430, pieR = 165;
+const svgPie = d3.select("#pie-chart")
+  .append("svg")
+  .attr("width", pieW)
+  .attr("height", pieH);
+
+const groupPie = svgPie.append("g")
+  .attr("transform", `translate(${pieW/2},${pieH/2})`);
+
+const arc = d3.arc().outerRadius(pieR).innerRadius(70).padAngle(0.038).cornerRadius(20);
+const pie = d3.pie().sort(null).value(d=>d.score);
+
+// 颜色和index页统一
+const color = d3.scaleLinear()
+  .domain([0, pieData.length])
+  .range(["#1abc9c", "#2281e3"]);
+
+const tooltip = d3.select("#tooltip");
+
+// 悬浮提示
+function showTooltip(html, event) {
+  tooltip.style("opacity", 1)
+    .html(html)
+    .style("left", (event.clientX + 28 + window.scrollX) + "px")
+    .style("top", (event.clientY - 22 + window.scrollY) + "px");
+}
+function hideTooltip() {
+  tooltip.style("opacity", 0);
+}
+// 弹窗
+function showModal(html) {
+  document.getElementById("modal").style.display = "flex";
+  document.getElementById("modal-body").innerHTML = html;
+}
+function hideModal() {
+  document.getElementById("modal").style.display = "none";
+}
+document.getElementById("modal-close").onclick = hideModal;
+window.onclick = function(e){
+  if(e.target === document.getElementById("modal")) hideModal();
+};
+
+// 饼图动画高亮&弹窗
+const arcs = groupPie.selectAll(".arc")
+  .data(pie(pieData))
+  .enter().append("g")
+  .attr("class", "arc");
+
+arcs.append("path")
+  .attr("d", arc)
+  .attr("fill", (d,i)=> d3.interpolateCool(i/pieData.length))
+  .attr("filter", "drop-shadow(0 2px 18px #20e3ce77)")
+  .style("cursor","pointer")
+  .on("mousemove", function(e,d){
+    d3.select(this).transition().duration(90)
+      .attr("filter", "drop-shadow(0 4px 30px #1abc9cdd)")
+      .attr("fill", "#1abc9c");
+    showTooltip(
+      `<div style="font-size:20px;color:#1abc9c;"><b>${d.data.subject}</b></div>
+      <div style="font-size:18px;">分数：${d.data.score}</div>`, e
+    );
+  })
+  .on("mouseleave", function(e,d,i){
+    d3.select(this).transition().duration(150)
+      .attr("filter", "drop-shadow(0 2px 18px #20e3ce77)")
+      .attr("fill", d3.interpolateCool(i/pieData.length));
+    hideTooltip();
+  })
+  .on("click", function(e, d) {
+    showModal(`
+      <div style="font-size:23px;color:#1abc9c;margin-bottom:8px;"><b>${d.data.subject}</b></div>
+      <div style="font-size:19px;margin-bottom:7px;"><b>分数：</b>${d.data.score}</div>
+      <div style="font-size:16px;color:#2281e3">${d.data.desc}</div>
+    `);
+  });
+
+// 饼图标签
+arcs.append("text")
+  .attr("transform", d=>{
+    let [x, y] = arc.centroid(d);
+    let ratio = 1.21;
+    return `translate(${x*ratio},${y*ratio})`;
+  })
+  .attr("class", "pie-label")
+  .attr("text-anchor", "middle")
+  .each(function(d){
+    const el = d3.select(this);
+    el.text(null)
+      .append("tspan")
+      .attr("x", 0)
+      .attr("dy", 0)
+      .text(d.data.subject)
+      .attr("font-size","15px")
+      .attr("fill","#20639b");
+    el.append("tspan")
+      .attr("x", 0)
+      .attr("dy", "1.2em")
+      .text(d.data.score)
+      .attr("font-size","16px")
+      .attr("fill","#1abc9c");
+  });
+
+// 雷达图数据
+const radarData = [
+  { axis: "基础理论", value: 0.90 },
+  { axis: "编程能力", value: 0.98 },
+  { axis: "实验能力", value: 0.92 },
+  { axis: "创新思维", value: 0.81 },
+  { axis: "沟通表达", value: 0.75 },
+  { axis: "英语", value: 0.73 }
+];
+const radarW = 390, radarH = 350, radarR = 110, radarCenter = [radarW/2, radarH/2+10];
+const radarSvg = d3.select("#radar-chart")
+  .append("svg")
+  .attr("width", radarW)
+  .attr("height", radarH);
+
+const angleSlice = 2 * Math.PI / radarData.length;
+
+for(let i=0; i<=5; i++) {
+  radarSvg.append("circle")
+    .attr("cx", radarCenter[0])
+    .attr("cy", radarCenter[1])
+    .attr("r", radarR * (i/5))
+    .style("fill", "#1abc9c13")
+    .style("stroke", "#c6ece9")
+    .style("stroke-width", i==5?2:1)
+    .style("opacity", i===5?0.20:0.09);
+}
+
+radarData.forEach((d,i) => {
+  let angle = i*angleSlice - Math.PI/2;
+  let x = radarCenter[0] + Math.cos(angle) * radarR;
+  let y = radarCenter[1] + Math.sin(angle) * radarR;
+  radarSvg.append("line")
+    .attr("x1", radarCenter[0]).attr("y1", radarCenter[1])
+    .attr("x2", x).attr("y2", y)
+    .attr("stroke", "#22b8a9cc")
+    .attr("stroke-width", "2");
+  radarSvg.append("text")
+    .attr("class", "radar-label")
+    .attr("x", radarCenter[0] + Math.cos(angle) * (radarR + 24))
+    .attr("y", radarCenter[1] + Math.sin(angle) * (radarR + 17))
+    .attr("text-anchor", "middle")
+    .attr("dominant-baseline","middle")
+    .text(d.axis);
+});
+
+// 雷达区
+const defs = radarSvg.append("defs");
+const gradient = defs.append("linearGradient")
+  .attr("id","radar-gradient")
+  .attr("x1","0%").attr("y1","0%")
+  .attr("x2","100%").attr("y2","100%");
+gradient.append("stop").attr("offset","0%").attr("stop-color","#1abc9c");
+gradient.append("stop").attr("offset","100%").attr("stop-color","#2281e3");
+
+const radarLine = d3.lineRadial()
+  .radius((d) => radarR * d.value)
+  .angle((d, i) => i * angleSlice)
+  .curve(d3.curveLinearClosed);
+
+radarSvg.append("path")
+  .datum(radarData)
+  .attr("class","radar-area")
+  .attr("d", radarLine)
+  .attr("fill","url(#radar-gradient)")
+  .attr("stroke","#2281e3")
+  .attr("stroke-width",3)
+  .attr("opacity",0.92)
+  .attr("transform", `translate(${radarCenter[0]},${radarCenter[1]})`);
+
+radarSvg.selectAll(".radar-dot")
+  .data(radarData)
+  .enter()
+  .append("circle")
+  .attr("class","radar-dot")
+  .attr("cx", (d,i) => radarCenter[0]+Math.cos(i*angleSlice-Math.PI/2)*radarR*d.value)
+  .attr("cy", (d,i) => radarCenter[1]+Math.sin(i*angleSlice-Math.PI/2)*radarR*d.value)
+  .attr("r", 7)
+  .style("fill", "#1abc9c")
+  .attr("filter", "drop-shadow(0 2px 6px #2281e344)")
+  .on("mouseenter", function(e,d){
+    d3.select(this).transition().attr("r", 13).style("fill","#2281e3");
+    showTooltip(
+      `<div style="color:#2281e3;"><b>${d.axis}</b></div><div>得分：${Math.round(d.value*100)}</div>`, e
+    );
+  })
+  .on("mousemove", function(e,d){
+    showTooltip(
+      `<div style="color:#2281e3;"><b>${d.axis}</b></div><div>得分：${Math.round(d.value*100)}</div>`, e
+    );
+  })
+  .on("mouseleave", function(){
+    d3.select(this).transition().attr("r", 7).style("fill","#1abc9c");
+    hideTooltip();
+  });
+</script>
+
+<audio id="audioElement" src="./music/烟花易冷.mp3" autoplay loop style="display:none"></audio>
+
+</body>
+</html>

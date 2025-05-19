@@ -1,0 +1,223 @@
+:root {
+  --primary: #1abc9c;
+  --primary-dark: #203a43;
+  --primary-blue: #2281e3;
+  --nav-gradient: linear-gradient(120deg, #203a43 80%, #149d82 140%);
+  --bg-gradient: linear-gradient(135deg, #203a43 0%, #2c5364 100%);
+  --card-bg: rgba(255,255,255,0.10);
+}
+
+body {
+  margin: 0;
+  font-family: '微软雅黑', 'Arial', 'Segoe UI', sans-serif;
+  background: var(--bg-gradient);
+  min-height: 100vh;
+}
+
+.layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+.sidebar {
+  width: 230px;
+  background: var(--nav-gradient);
+  color: #fff;
+  min-height: 100vh;
+  box-shadow: 2px 0 22px #203a4366;
+  z-index: 10;
+  padding-top: 28px;
+  padding-bottom: 38px;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar h2 {
+  text-align: center;
+  font-size: 23px;
+  letter-spacing: 3px;
+  margin: 0 0 28px 0;
+  font-weight: bold;
+  color: #1abc9c;
+  text-shadow: 0 4px 28px #149d8230;
+}
+
+.nav-links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  flex: 1;
+}
+.nav-links li {
+  margin: 18px 0;
+  font-size: 17px;
+}
+.nav-links li.section-label {
+  margin: 30px 0 12px 18px;
+  color: #1abc9c99;
+  font-size: 13px;
+  letter-spacing: 2px;
+  font-weight: 600;
+}
+.nav-links li a {
+  color: #fff;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  padding: 11px 22px 11px 30px;
+  border-radius: 18px 0 0 18px;
+  transition: all 0.24s;
+  opacity: 0.91;
+  font-weight: 500;
+  font-size: 17px;
+  position: relative;
+}
+.nav-links li a.active,
+.nav-links li a:hover {
+  background: linear-gradient(90deg, #1abc9c 65%, #2281e3 100%);
+  color: #fff;
+  font-weight: 600;
+  opacity: 1;
+  box-shadow: 3px 2px 18px #1abc9c29;
+}
+.nav-links li a i {
+  font-size: 1.25rem;
+  margin-right: 12px;
+}
+
+.main {
+  flex: 1;
+  padding: 54px 0 28px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+}
+h1 {
+  font-size: 2.15rem;
+  color: #20e3ce;
+  text-shadow: 0 4px 26px #149d8249;
+  font-weight: bold;
+  letter-spacing: 2.2px;
+  margin-bottom: 34px;
+  margin-top: 4px;
+}
+.sub-title {
+  font-size: 1.22rem;
+  color: var(--primary-blue);
+  font-weight: 700;
+  margin: 44px 0 16px 0;
+  letter-spacing: 1.1px;
+  text-shadow: 0 2px 8px #1abc9c44;
+}
+#pie-chart, #radar-chart {
+  margin: 0 auto;
+  border-radius: 22px;
+  background: var(--card-bg);
+  box-shadow: 0 8px 42px #26d6e61a;
+  padding: 16px 10px 18px 10px;
+  margin-bottom: 13px;
+}
+
+/* 饼图标签 */
+.pie-label tspan {
+  font-family: 'Segoe UI', '微软雅黑', Arial, sans-serif;
+  font-weight: bold;
+  letter-spacing: 1.4px;
+  pointer-events: none;
+  text-shadow: 1px 2px 10px #149d8240;
+}
+
+/* 雷达图标签 */
+.radar-label {
+  font-size: 14px;
+  font-weight: 600;
+  fill: #1abc9c;
+  text-shadow: 0 2px 9px #2281e3aa;
+  letter-spacing: 1.5px;
+}
+
+/* 雷达区 */
+.radar-area {
+  fill: url(#radar-gradient);
+  opacity: 0.78;
+}
+.radar-dot {
+  stroke: #fff;
+  stroke-width: 2px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+/* tooltip */
+.pie-tooltip {
+  position: absolute;
+  pointer-events: none;
+  background: linear-gradient(120deg, #fff 70%, #c3f1ee 100%);
+  color: #1abc9c;
+  box-shadow: 0 6px 22px #0be4d13a;
+  border-radius: 13px;
+  padding: 15px 26px 13px 21px;
+  font-size: 16px;
+  z-index: 1002;
+  min-width: 88px;
+  max-width: 350px;
+  opacity: 0;
+  border: 2px solid #1abc9c15;
+  text-align: left;
+  font-family: "Segoe UI", "微软雅黑", Arial, sans-serif;
+  line-height: 1.7;
+  transition: opacity 0.19s;
+  font-weight: 500;
+  left: 0; top: 0;
+}
+
+/* 弹窗 */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1111;
+  left: 0; top: 0; right:0; bottom:0;
+  width: 100vw; height: 100vh;
+  background: rgba(19,32,47,0.13);
+  align-items: center;
+  justify-content: center;
+}
+.modal-content {
+  background: #f5fcff;
+  color: #1e3554;
+  border-radius: 17px;
+  box-shadow: 0 14px 48px #1abc9c29;
+  padding: 42px 42px 28px 42px;
+  position: relative;
+  max-width: 370px;
+  min-width: 240px;
+  min-height: 120px;
+  font-size: 18px;
+  animation: pop-in 0.23s;
+}
+@keyframes pop-in {
+  from { transform: scale(0.87); opacity: 0;}
+  to   { transform: scale(1); opacity: 1;}
+}
+.close-btn {
+  position: absolute;
+  right: 18px;
+  top: 14px;
+  color: #1abc9c;
+  font-size: 27px;
+  font-weight: bold;
+  cursor: pointer;
+  opacity: 0.85;
+  transition: color 0.23s;
+  z-index: 1112;
+}
+.close-btn:hover {
+  color: #ec5660;
+  opacity: 1;
+}
+@media (max-width:900px) {
+  .sidebar { width: 120px; font-size:13px;}
+  .main { padding-left: 0; }
+  #pie-chart, #radar-chart { max-width: 99vw;}
+}

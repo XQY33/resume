@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>徐其雍的个人简历</title>
+  <link rel="stylesheet" href="css/base.css" />
+  <link href="https://cdn.jsdelivr.net/npm/remixicon/fonts/remixicon.css" rel="stylesheet" />
+  <style>
+    :root {
+      --primary: #1abc9c;
+      --primary-dark: #203a43;
+      --primary-blue: #2281e3;
+      --bg-gradient: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+      --nav-gradient: linear-gradient(140deg, #16314a 70%, #1abc9c 200%);
+      --card-bg: rgba(255,255,255,0.05);
+    }
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', 'Arial', sans-serif;
+      background: var(--bg-gradient);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    .star-bg-canvas {
+      position: fixed;
+      left: 0; top: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 0;
+      pointer-events: none;
+      opacity: 0.70;
+      transition: opacity 0.6s;
+    }
+    .layout {
+      display: flex;
+      min-height: 100vh;
+      position: relative;
+      z-index: 1;
+    }
+    .sidebar {
+      width: 220px;
+      background: var(--nav-gradient);
+      color: #203a43;
+      min-height: 100vh;
+      box-shadow: 2px 0 20px #203a43;
+      z-index: 10;
+      padding-top: 14px;
+      padding-bottom: 30px;
+      display: flex;
+      flex-direction: column;
+    }
+    .sidebar h2 {
+      text-align: center;
+      font-size: 22px;
+      letter-spacing: 3px;
+      margin: 0 0 28px 0;
+      font-weight: bold;
+      color: var(--primary);
+      text-shadow: 0 4px 24px #203a43;
+    }
+    .nav-links {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      flex: 1;
+    }
+    .nav-links li {
+      margin: 17px 0;
+      font-size: 17px;
+    }
+    .nav-links li.section-label {
+      margin: 30px 0 12px 12px;
+      color: #1abc9caa;
+      font-size: 12px;
+      letter-spacing: 2px;
+      font-weight: 600;
+    }
+    .nav-links li a {
+      color: #fff;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      padding: 10px 22px 10px 28px;
+      border-radius: 18px 0 0 18px;
+      transition: all 0.24s;
+      opacity: 0.88;
+      font-weight: 500;
+      font-size: 17px;
+      position: relative;
+    }
+    .nav-links li a.active,
+    .nav-links li a:hover {
+      background: linear-gradient(90deg, #1abc9c 60%, #20639b 100%);
+      color: #fff;
+      font-weight: 600;
+      opacity: 1;
+      box-shadow: 3px 2px 16px #1abc9c2a;
+    }
+    .nav-links li a i {
+      font-size: 1.3rem;
+      margin-right: 13px;
+    }
+    .social-links {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 30px;
+    }
+    .social-links a {
+      color: #1abc9c;
+      font-size: 26px;
+      margin: 0 7px;
+      transition: color 0.19s;
+      text-decoration: none;
+    }
+    .social-links a:hover { color: #fff; }
+    .contact-info {
+      font-size: 13px;
+      margin-top: 11px;
+      color: #eee;
+      text-align: left;
+      padding-left: 4px;
+    }
+    .main {
+      flex: 1;
+      padding: 50px 0 30px 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      z-index: 2;
+    }
+    .hero {
+      margin-bottom: 25px;
+      margin-top: 14px;
+      text-align: center;
+      z-index: 3;
+    }
+    .hero-title {
+      font-size: 2.2rem;
+      color: #e0f7f4;
+      text-shadow: 0 4px 24px #2c536477;
+      font-weight: bold;
+      letter-spacing: 2px;
+    }
+    .hero-title span {
+      color: var(--primary);
+      text-shadow: 0 0 20px #1abc9c42;
+    }
+    .hero-subtitle {
+      color: #91e7ff;
+      margin-top: 10px;
+      font-size: 1.14rem;
+      text-shadow: 0 2px 6px #2291e360;
+    }
+    .card-section {
+      margin: 18px 0 6px 0;
+      z-index: 2;
+    }
+    .info-card {
+      background: var(--card-bg);
+      box-shadow: 0 8px 40px #26d6e615;
+      padding: 34px 44px 24px 44px;
+      border-radius: 18px;
+      text-align: center;
+      max-width: 420px;
+      margin: 0 auto;
+    }
+    .info-card img {
+      border-radius: 50%;
+      width: 106px;
+      height: 106px;
+      object-fit: cover;
+      margin-bottom: 10px;
+      box-shadow: 0 2px 16px #1abc9c77;
+      border: 3.2px solid #1abc9c44;
+    }
+    .info-card h2 {
+      margin: 7px 0 5px 0;
+      color: var(--primary-blue);
+      font-size: 1.6rem;
+      font-weight: 700;
+    }
+    .info-card p {
+      color: #b0eef6;
+      font-size: 1.05rem;
+      margin: 7px 0;
+    }
+    .info-card blockquote {
+      font-size: 15px;
+      color: #1abc9c;
+      margin: 19px 0 3px 0;
+      font-style: italic;
+      border-left: 3.5px solid #1abc9c44;
+      padding-left: 18px;
+    }
+    /* 行内并排 */
+    .row-flex {
+      display: flex;
+      gap: 36px;
+      align-items: flex-start;
+      justify-content: center;
+      margin-top: 36px;
+      margin-bottom: 18px;
+      width: 100%;
+      z-index: 5;
+    }
+    .skills-section {
+      min-width: 290px;
+      max-width: 390px;
+      flex: 1 1 340px;
+      background: var(--card-bg);
+      box-shadow: 0 6px 24px #1abc9c22;
+      border-radius: 16px;
+      padding: 26px 36px;
+    }
+    .skills-section h3 {
+      color: var(--primary-blue);
+      font-size: 1.25rem;
+      margin-bottom: 15px;
+      text-align: left;
+      font-weight: 600;
+      letter-spacing: 2px;
+    }
+    .skill-item {
+      margin-bottom: 19px;
+      font-size: 1.08rem;
+      color: #26c4c6;
+      font-weight: 600;
+    }
+    .skill-bar-bg {
+      background: #113947;
+      height: 9px;
+      border-radius: 9px;
+      overflow: hidden;
+      margin-top: 6px;
+      margin-bottom: 3px;
+      width: 95%;
+    }
+    .skill-bar {
+      height: 100%;
+      border-radius: 9px;
+      background: linear-gradient(90deg, #1abc9c, #2281e3);
+      box-shadow: 0 2px 10px #1abc9c77;
+      transition: width 1.2s cubic-bezier(.57,1.6,.5,.95);
+    }
+    .cool-music-player {
+      min-width: 220px;
+      max-width: 360px;
+      flex: 1 1 260px;
+      background: var(--card-bg);
+      box-shadow: 0 6px 24px #1abc9c22;
+      border-radius: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 27px 20px 20px 20px;
+    }
+    .music-title {
+      color: #1abc9c;
+      font-size: 1.12rem;
+      text-align: center;
+      margin-bottom: 7px;
+      letter-spacing: 1.3px;
+      font-weight: 600;
+    }
+    .music-tip {
+      font-size: 12px;
+      color: #21e4ce;
+      font-weight: 400;
+    }
+    .cool-music-player audio {
+      width: 90%;
+      margin: 7px 0 13px 0;
+      border-radius: 6px;
+      background: #222;
+    }
+    .wave-bars {
+      display: flex;
+      align-items: flex-end;
+      height: 28px;
+      margin-top: 4px;
+      gap: 2px;
+      width: 92%;
+    }
+    .wave-bars .bar {
+      width: 6px;
+      height: 9px;
+      border-radius: 6px;
+      background: linear-gradient(180deg, #1abc9c, #2281e3 60%);
+      opacity: 0.66;
+      transition: height 0.25s cubic-bezier(.66,1.4,.34,1.25), background 0.5s;
+    }
+    .wave-bars.playing .bar {
+      animation: waveAnim 0.85s infinite;
+      opacity: 1;
+      background: linear-gradient(180deg, #22b8a9, #2096fa 60%);
+    }
+    .wave-bars .bar:nth-child(1) { animation-delay: 0s; }
+    .wave-bars .bar:nth-child(2) { animation-delay: 0.08s; }
+    .wave-bars .bar:nth-child(3) { animation-delay: 0.16s; }
+    .wave-bars .bar:nth-child(4) { animation-delay: 0.22s; }
+    .wave-bars .bar:nth-child(5) { animation-delay: 0.25s; }
+    .wave-bars .bar:nth-child(6) { animation-delay: 0.31s; }
+    .wave-bars .bar:nth-child(7) { animation-delay: 0.37s; }
+    .wave-bars .bar:nth-child(8) { animation-delay: 0.43s; }
+    .wave-bars .bar:nth-child(9) { animation-delay: 0.50s; }
+    .wave-bars .bar:nth-child(10) { animation-delay: 0.55s; }
+    .wave-bars .bar:nth-child(11) { animation-delay: 0.60s; }
+    .wave-bars .bar:nth-child(12) { animation-delay: 0.68s; }
+    @keyframes waveAnim {
+      0% { height: 8px; }
+      20% { height: 26px; }
+      40% { height: 15px; }
+      60% { height: 23px; }
+      80% { height: 12px; }
+      100% { height: 8px; }
+    }
+    @media (max-width: 1000px) {
+      .row-flex { flex-direction: column; gap: 24px; align-items: stretch; }
+      .skills-section, .cool-music-player { max-width: 100%; min-width: 0; }
+      .card-section { max-width: 97vw; }
+    }
+    @media (max-width: 900px) {
+      .sidebar { width: 120px; font-size:13px;}
+      .main { padding-left: 0; }
+    }
+    @media (max-width:700px) {
+      .sidebar { display: none; }
+      .main { padding: 12px 0; }
+      .info-card { padding: 14px 3vw; }
+    }
+
+    .typewriter {
+  color: #fff;
+  font-size: 1.2rem;
+  font-family: 'Fira Mono', 'Consolas', monospace;
+  border-right: 2.5px solid #1abc9c;
+  white-space: pre;
+  letter-spacing: 2.3px;
+  overflow: hidden;
+  width: 98%;
+  min-height: 1.8em;
+  margin: 17px auto 0 auto;
+  max-width: 580px;
+  text-align: center;
+  animation: blinkCursor 0.85s steps(1) infinite;
+}
+@keyframes blinkCursor {
+  0%,100% { border-color: #1abc9c; }
+  60% { border-color: transparent; }
+}
+
+  </style>
+</head>
+<body>
+  <canvas id="star-bg" class="star-bg-canvas"></canvas>
+  <div class="layout">
+    <!-- 左侧导航 -->
+    <nav class="sidebar">
+      <h2>导航栏</h2>
+      <ul class="nav-links">
+        <li><a href="index.html" class="active"><i class="ri-home-4-line"></i> 首页</a></li>
+        <li><a href="profile.html"><i class="ri-user-3-line"></i> 个人简介</a></li>
+        <li><a href="score.html"><i class="ri-team-line"></i> 大学成绩</a></li>
+        <li><a href="rel.html"><i class="ri-team-line"></i> 人际关系</a></li>
+        <li><a href="school.html"><i class="ri-graduation-cap-line"></i> 大学</a></li>
+        <li><a href="home.html"><i class="ri-home-smile-2-line"></i> 家乡</a></li>
+      </ul>
+      <div class="social-links">
+        <a href="https://github.com/XQY33" target="_blank" title="GitHub"><i class="ri-github-fill"></i></a>
+        <a href="https://account.bilibili.com/account/home?spm_id_from=333.1007.0.0" target="_blank" title="Bilibili"><i class="ri-bilibili-line"></i></a>
+        <a href="mailto:xuqiyong2023@gmail.com" title="邮箱"><i class="ri-mail-line"></i></a>
+        <div class="contact-info">
+          <p>📞 电话：15388888888</p>
+          <p>✉️ 邮箱：xuqiyong2023@gmail.com</p>
+        </div>
+      </div>
+    </nav>
+    <main class="main">
+      <section class="hero">
+        <h1 class="hero-title">你好，我是 <span>徐其雍</span></h1>
+        <p class="hero-subtitle">电子信息工程三班｜重庆理工大学｜嵌入式软件工程师</p>
+        <p class="hero-subtitle"></p>
+        <p class="typewriter" id="typewriter"></p>
+      </section>
+      <section class="card-section">
+        <div class="info-card">
+          <img src="./images/xqy.jpg" alt="头像" />
+          <h2>徐其雍</h2>
+          <p>重庆理工大学 · 电子信息工程三班</p>
+          <p>学号：12202010116</p>
+          <p>年龄：21岁</p>
+          <blockquote>“每个字节都是哲学的碎片，每次优化都是对工程师心智的升华”</blockquote>
+        </div>
+      </section>
+      <div class="row-flex">
+        <section class="skills-section">
+          <h3>专业技能</h3>
+          <div class="skill-item">C/C++ & STM32
+            <div class="skill-bar-bg">
+              <div class="skill-bar" style="width:93%"></div>
+            </div>
+          </div>
+          <div class="skill-item">嵌入式系统开发
+            <div class="skill-bar-bg">
+              <div class="skill-bar" style="width:89%"></div>
+            </div>
+          </div>
+          <div class="skill-item">前端 (HTML/CSS/JS/Vue)
+            <div class="skill-bar-bg">
+              <div class="skill-bar" style="width:82%"></div>
+            </div>
+          </div>
+          <div class="skill-item">Python & 数据处理
+            <div class="skill-bar-bg">
+              <div class="skill-bar" style="width:75%"></div>
+            </div>
+          </div>
+          <div class="skill-item">电路设计 (Altium/KiCad)
+            <div class="skill-bar-bg">
+              <div class="skill-bar" style="width:70%"></div>
+            </div>
+          </div>
+
+
+        </section>
+        <section class="cool-music-player">
+          <p class="music-title">
+            🎧 背景音乐：<strong>《keep your head up princess》</strong><br />
+            <span class="music-tip">* 部分浏览器禁止自动播放，请点击播放按钮</span>
+          </p>
+          <audio id="bgMusic" src="./music/keep.mp3.mp3"controls="controls" autoplay loop></audio>
+          <div class="wave-bars" id="waveBars">
+            <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
+            <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
+            <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
+          </div>
+        </section>
+
+      </div>
+    </main>
+  </div>
+
+  <script>
+    const textArr = [
+      "Welcome to Xu Qiyong's personal homepage!",
+      "徐其雍，专注嵌入式与智能算法研发。",
+      "Let's code, connect, and make the future better together.",
+      "不止于技术，更热爱创造与成长。"
+    ];
+    let index = 0, char = 0;
+    function typing() {
+      const el = document.getElementById("typewriter");
+      if (!el) return;
+      el.textContent = textArr[index].slice(0, char);
+      char++;
+      if (char > textArr[index].length) {
+        setTimeout(() => {
+          char = 0;
+          index = (index + 1) % textArr.length;
+          typing();
+        }, 1700);
+      } else {
+        setTimeout(typing, 80);
+      }
+    }
+    typing();
+  </script>
+
+
+
+
+
+  <!-- 星空粒子动画 -->
+  <script>
+
+  
+
+    // 星空动画
+    const canvas = document.getElementById('star-bg');
+    let ctx = canvas.getContext('2d');
+    let w = window.innerWidth, h = window.innerHeight;
+    let stars = [];
+    let starCount = Math.floor(w * h / 4000); // 星空密度，分辨率自适应
+    function resize() {
+      w = window.innerWidth; h = window.innerHeight;
+      canvas.width = w; canvas.height = h;
+    }
+    window.addEventListener('resize', ()=>{resize(); initStars();});
+    function initStars() {
+      stars = [];
+      for(let i=0;i<starCount;i++) {
+        let r = Math.random()*1.2+0.3;
+        stars.push({
+          x: Math.random()*w,
+          y: Math.random()*h,
+          r,
+          alpha: Math.random()*0.4+0.5,
+          vx: (Math.random()-0.5)*0.07,
+          vy: (Math.random()-0.5)*0.07
+        });
+      }
+    }
+    function drawStars() {
+      ctx.clearRect(0,0,w,h);
+      for(const s of stars){
+        ctx.save();
+        ctx.globalAlpha = s.alpha;
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, s.r, 0, 2*Math.PI, false);
+        ctx.fillStyle = Math.random() > 0.7 ? "#1abc9c" : (Math.random() > 0.5 ? "#e8f9ff" : "#fff");
+        ctx.shadowColor = "#20e3ce";
+        ctx.shadowBlur = Math.random() > 0.65 ? 14 : 6;
+        ctx.fill();
+        ctx.restore();
+        // 动起来
+        s.x += s.vx; s.y += s.vy;
+        // 循环
+        if(s.x<0) s.x=w;
+        if(s.x>w) s.x=0;
+        if(s.y<0) s.y=h;
+        if(s.y>h) s.y=0;
+      }
+    }
+    function animate() {
+      drawStars();
+      requestAnimationFrame(animate);
+    }
+    resize(); initStars(); animate();
+
+    // 音乐波浪条
+    const audio = document.getElementById("bgMusic");
+    const wave = document.getElementById("waveBars");
+    function updateAnimation() {
+      if (audio.paused) {
+        wave.classList.remove("playing");
+      } else {
+        wave.classList.add("playing");
+      }
+    }
+    audio.addEventListener("play", updateAnimation);
+    audio.addEventListener("pause", updateAnimation);
+    audio.addEventListener("ended", updateAnimation);
+    window.addEventListener("load", updateAnimation);
+  </script>
+</body>
+</html>

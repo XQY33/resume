@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <title>学校所在位置</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- 主色调CSS -->
+    <style>
+        :root {
+            --primary: #1abc9c;
+            --primary-blue: #2281e3;
+            --nav-bg: linear-gradient(140deg, #16314a 70%, #1abc9c 200%);
+            --card-bg: rgba(255,255,255,0.08);
+        }
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', 'Arial', sans-serif;
+            background: linear-gradient(135deg,#0f2027 0%, #203a43 55%, #2c5364 100%);
+            min-height: 100vh;
+            color: #fff;
+        }
+        .top-tip {
+            background: linear-gradient(90deg,#133046 80%,#0c4c48);
+            padding: 15px 0 10px 0;
+            margin-bottom: 0;
+        }
+        .top-tip p {
+            color: #faad14;
+            font-size: 15px;
+            font-weight: bold;
+            text-align: center;
+            margin: 0;
+        }
+        .top-tip span {
+            color: #c30e41;
+        }
+        .layout {
+            display: flex;
+            min-height: 100vh;
+            flex-direction: column;
+        }
+        .header-bar {
+            background: var(--nav-bg);
+            color: #fff;
+            padding: 10px 0 10px 30px;
+            font-size: 19px;
+            font-weight: bold;
+            letter-spacing: 2px;
+            box-shadow: 0 2px 20px #1abc9c18;
+            display: flex;
+            align-items: center;
+        }
+        .header-bar a {
+            color: #fff;
+            background: #1abc9c;
+            border-radius: 6px;
+            text-decoration: none;
+            margin-right: 26px;
+            padding: 7px 19px;
+            font-size: 15px;
+            transition: background 0.2s;
+        }
+        .header-bar a:hover { background: #2281e3;}
+        #container {
+            width: 97vw;
+            max-width: 1440px;
+            height: 62vh;
+            min-height: 410px;
+            max-height: 76vh;
+            margin: 28px auto 16px auto;
+            border-radius: 22px;
+            box-shadow: 0 10px 45px #1abc9c23;
+            background: var(--card-bg);
+            overflow: hidden;
+            border: 2.5px solid #1abc9c40;
+        }
+        .music-bar {
+            text-align: center;
+            margin-top: 18px;
+            margin-bottom: 34px;
+        }
+        .music-bar audio {
+            width: 320px;
+            max-width: 80vw;
+            border-radius: 8px;
+            box-shadow: 0 2px 12px #1abc9c88;
+            background: #23374c;
+            outline: none;
+            margin-top: 10px;
+        }
+        @media (max-width:900px) {
+            #container { height: 45vh; min-height: 270px;}
+            .header-bar { font-size: 16px; padding: 10px 0 10px 12px;}
+        }
+        @media (max-width:600px) {
+            #container { height: 230px; min-height: 170px;}
+            .music-bar audio { width: 99vw; }
+        }
+    </style>
+    <!-- 百度地图 WebGL -->
+    <script src="//api.map.baidu.com/api?type=webgl&v=1.0&ak=lgj1icmXqYZaTf7V9WOs7Hj1FspANFSE"></script>
+</head>
+<body>
+    <!-- 温馨提示 -->
+
+    <div class="layout">
+        <!-- 顶部导航栏 -->
+        <div class="header-bar">
+            <a href="index.html">返回首页</a>
+            学校所在位置 · 3D地图展示
+        </div>
+            <div class="top-tip">
+        <p>
+          温馨提示：请使用 <span>Web 服务器</span>（如 XAMPP、Live Server、Python http.server 等）访问本页，避免直接 <span style="color:#e57373;">file://</span> 打开，确保地图和音频功能正常显示。
+        </p>
+    </div>
+
+        <!-- 地图容器 -->
+        <div id="container"></div>
+        <!-- 音乐播放器 -->
+        <div class="music-bar">
+            <div style="color:#1abc9c;font-size:1rem;font-weight:600;">
+                🎵 背景音乐：<b>Self Love</b>
+            </div>
+            <audio id="audioElement" src="./music/self love.mp3" controls autoplay loop></audio>
+        </div>
+    </div>
+
+    <script>
+        // 百度地图初始化
+        var map = new BMapGL.Map('container', {
+            backgroundColor: [29, 57, 79, 90]
+        });
+        var testPt = new BMapGL.Point(106.53679, 29.460046);
+        map.centerAndZoom(testPt, 18);
+        map.enableScrollWheelZoom();
+        map.setTilt(50);
+
+        // 掩模区域
+        var path = [
+            new BMapGL.Point(106.535037, 29.465426),
+            new BMapGL.Point(106.532035, 29.462328),
+            new BMapGL.Point(106.533952, 29.460665),
+            new BMapGL.Point(106.532601, 29.458681),
+            new BMapGL.Point(106.534025, 29.457315),
+            new BMapGL.Point(106.533125, 29.453275),
+            new BMapGL.Point(106.535648, 29.451744),
+            new BMapGL.Point(106.540725, 29.456715),
+            new BMapGL.Point(106.540727, 29.456717),
+            new BMapGL.Point(106.538214, 29.460945),
+            new BMapGL.Point(106.539525, 29.462691),
+            new BMapGL.Point(106.535034, 29.465427),
+        ];
+        var mapmask = new BMapGL.MapMask(path, {
+            isBuildingMask: true,
+            isPoiMask: true,
+            isMapMask: true,
+            showRegion: 'inside'
+        });
+        map.addOverlay(mapmask);
+
+        // 添加标记点
+        var marker = new BMapGL.Marker(testPt);
+        map.addOverlay(marker);
+    </script>
+</body>
+</html>
